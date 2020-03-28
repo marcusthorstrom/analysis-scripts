@@ -12,7 +12,7 @@ load_dotenv(dotenv_path=env_path, verbose=True)
 READ_TOKEN = os.getenv("READ_TOKEN")
 READ_API_URL = os.getenv("READ_API_URL")
 
-DATABASE = 'covid_dev'
+DATABASE = 'covid'
 
 INPUT_DATASETS_PATH = project_dir/ 'input_datasets'
 OUTPUT_DATASETS_PATH = project_dir / 'output_datasets'
