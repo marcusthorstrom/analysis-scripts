@@ -17,7 +17,7 @@ cd $PUBLIC_DATASET_REPO
 now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 echo $now > last_update.txt
 
-# push to github
-#git add .
-#git commit -m "update $now"
-#git push
+push to github
+git add .
+git commit -m "update $now"
+git push
