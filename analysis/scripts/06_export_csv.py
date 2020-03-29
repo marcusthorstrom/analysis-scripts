@@ -30,7 +30,7 @@ def export_daily_report_to_csv():
     locations = q.all()
     geo_locations = {}
     for location in locations:
-        geo_locations[str(location.npa)] = {
+        geo_locations[str(location.postal_code)] = {
             'longitude': location.longitude,
             'latitude': location.latitude,
         }
@@ -40,12 +40,12 @@ def export_daily_report_to_csv():
         'locator',
         'latitude',
         'longitude',
-        'total_healthy',
-        'total_sick_guess_no_corona',
-        'total_sick_guess_corona',
-        'total_sick_corona_confirmed',
-        'total_recovered_confirmed',
-        'total_recovered_not_confirmed',
+        'healthy',
+        'sick_guess_no_corona',
+        'sick_guess_corona',
+        'sick_corona_confirmed',
+        'recovered_confirmed',
+        'recovered_not_confirmed',
     ]
 
     merge_file = OUTPUT_DATASETS_PATH / 'merge-all-days.csv'
@@ -125,24 +125,24 @@ def export_daily_report_to_csv():
                         'longitude': total['longitude'],
                         'latitude': total['latitude'],
                         'date': current_day.strftime(DAY_FORMAT),
-                        'total_healthy': total['data'][0],
-                        'total_sick_guess_no_corona': total['data'][1],
-                        'total_sick_guess_corona': total['data'][2],
-                        'total_sick_corona_confirmed': total['data'][3],
-                        'total_recovered_not_confirmed': total['data'][4],
-                        'total_recovered_confirmed': total['data'][5],
+                        'healthy': total['data'][0],
+                        'sick_guess_no_corona': total['data'][1],
+                        'sick_guess_corona': total['data'][2],
+                        'sick_corona_confirmed': total['data'][3],
+                        'recovered_not_confirmed': total['data'][4],
+                        'recovered_confirmed': total['data'][5],
                     })
                     merge_writer.writerow({
                         'locator': locator,
                         'longitude': total['longitude'],
                         'latitude': total['latitude'],
                         'date': current_day.strftime(DAY_FORMAT),
-                        'total_healthy': total['data'][0],
-                        'total_sick_guess_no_corona': total['data'][1],
-                        'total_sick_guess_corona': total['data'][2],
-                        'total_sick_corona_confirmed': total['data'][3],
-                        'total_recovered_not_confirmed': total['data'][4],
-                        'total_recovered_confirmed': total['data'][5],
+                        'healthy': total['data'][0],
+                        'sick_guess_no_corona': total['data'][1],
+                        'sick_guess_corona': total['data'][2],
+                        'sick_corona_confirmed': total['data'][3],
+                        'recovered_not_confirmed': total['data'][4],
+                        'recovered_confirmed': total['data'][5],
                     })
                 print(total_status)
 

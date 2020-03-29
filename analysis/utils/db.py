@@ -14,7 +14,7 @@ class IndividualReportModel(base):
     __tablename__ = 'individual_report'
     document_id = sa.Column(sa.String(30), primary_key=True)
     diagnostic = sa.Column(sa.Integer,nullable=False)
-    locator = sa.Column(sa.String(4),nullable=False)
+    locator = sa.Column(sa.String(15),nullable=False)
     session_id = sa.Column(sa.String(50),nullable=False)
     timestamp = sa.Column(sa.BigInteger, nullable=False)
     symptoms = sa.Column(sa.String(255))
@@ -25,9 +25,9 @@ class IndividualReportModel(base):
 
 
 class DailyDiagnosticChangeModel(base):
-    __tablename__ = 'daily_diagnostic_change' #<- must declare name for db table
+    __tablename__ = 'daily_diagnostic_change'
     id = sa.Column(sa.Integer, primary_key=True,autoincrement=True)
-    locator = sa.Column(sa.String(4))
+    locator = sa.Column(sa.String(15))
     date = sa.Column(sa.Date)
     diagnostic_0 = sa.Column(sa.Integer, default=0)
     diagnostic_1 = sa.Column(sa.Integer, default=0)
@@ -49,15 +49,18 @@ class DailyDiagnosticChangeModel(base):
 
 
 class LocationModel(base):
-    __tablename__ = 'location'
-    npa = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    state = sa.Column(sa.String(2))  # canton
-    town = sa.Column(sa.String(100))
+    """
+    headers from csv: country_code,postal_code,town,region,latitude,longitude
+    """
+    __tablename__ = 'locations'
+    postal_code = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    country_code = sa.Column(sa.String(3))
+    region_id = sa.Column(sa.Text)
     longitude = sa.Column(sa.Float)
     latitude = sa.Column(sa.Float)
 
     def __repr__(self):
-        return '<Location: NPA ' + self.npa + ' state ' + str(self.state) + '>'
+        return '<Location: ' + self.postal_code + '>'
 
 
 def init_db():

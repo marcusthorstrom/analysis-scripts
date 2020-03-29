@@ -6,7 +6,7 @@ then
   export $(cat .env | sed 's/#.*//g' | xargs)
 fi
 
-now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+now=$(date -u +"%Y_%m_%d_%H_%M_%S")
 
 mkdir -p backups/sql
 

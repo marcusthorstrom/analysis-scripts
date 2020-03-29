@@ -14,8 +14,11 @@ READ_API_URL = os.getenv("READ_API_URL")
 
 DATABASE = os.getenv("DATABASE_NAME")
 MYSQL_PORT = os.getenv("MYSQL_PORT")
+GEOCODING_RAW_FILE_URL = os.getenv("GEOCODING_RAW_FILE_URL")
+
 
 OUTPUT_DATASETS_PATH = project_dir / 'output_datasets'
+TMP_PATH = project_dir / 'tmp'
 BACKUP_PATH = project_dir / 'backups'
 BACKUP_DOCUMENTS_PATH = BACKUP_PATH / 'documents'
 
@@ -34,3 +37,5 @@ if not BACKUP_DOCUMENTS_PATH.exists():
 if not DAILY_REPORT_DIR.exists():
     DAILY_REPORT_DIR.mkdir()
 
+if not TMP_PATH.exists():
+    TMP_PATH.mkdir()
