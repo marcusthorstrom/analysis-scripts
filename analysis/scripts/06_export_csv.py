@@ -12,7 +12,7 @@ DAY_FORMAT = '%Y-%m-%d'
 
 def export_daily_report_to_csv():
     from_day = '2020-03-24' #starting date in database !!!
-    to_day = '2020-03-28'
+    to_day = '2020-03-29'
 
     from_date = datetime.strptime(from_day, DAY_FORMAT)
     to_date = datetime.strptime(to_day, DAY_FORMAT)
