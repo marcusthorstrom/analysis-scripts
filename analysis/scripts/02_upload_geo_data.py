@@ -8,8 +8,6 @@ import requests
 GEOCODING_RAW_FILE = TMP_PATH / 'geocoding.csv'
 
 
-# country_code,postal_code,latitude,longitude,region_id
-
 def download_geocoding_file():
     print("downloading geocoding file...")
     response = requests.get(GEOCODING_RAW_FILE_URL)
@@ -57,4 +55,5 @@ def upload_geo_data():
 
 
 if __name__ == '__main__':
+    download_geocoding_file()
     upload_geo_data()
