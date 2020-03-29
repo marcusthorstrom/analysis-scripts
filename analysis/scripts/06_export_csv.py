@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta, date
 from analysis.utils.db import DailyDiagnosticChangeModel
 from analysis.utils.db import LocationModel
 from analysis.utils.db import session
@@ -10,12 +10,16 @@ import csv
 DAY_FORMAT = '%Y-%m-%d'
 
 
-def export_daily_report_to_csv():
-    from_day = '2020-03-24' #starting date in database !!!
-    to_day = '2020-03-29'
+def get_starting_date():
+    q = session.query(DailyDiagnosticChangeModel)
+    daily_change = q.order_by(DailyDiagnosticChangeModel.date).first()
+    return daily_change.date
 
-    from_date = datetime.strptime(from_day, DAY_FORMAT)
-    to_date = datetime.strptime(to_day, DAY_FORMAT)
+
+def export_daily_report_to_csv():
+
+    from_date = get_starting_date()
+    to_date = date.today()
 
     # clean the current output
     for _f in DAILY_REPORT_DIR.glob('*.csv'):
@@ -29,13 +33,11 @@ def export_daily_report_to_csv():
         geo_locations[str(location.npa)] = {
             'longitude': location.longitude,
             'latitude': location.latitude,
-            'state': location.state
         }
 
     fieldnames = [
         'date',
-        'state',
-        'npa_plz',
+        'locator',
         'latitude',
         'longitude',
         'total_healthy',
@@ -57,13 +59,13 @@ def export_daily_report_to_csv():
         while current_day <= to_date:
 
             # create daily file
-            daily_file = DAILY_REPORT_DIR / ('ch-covid-19-' + current_day.strftime(DAY_FORMAT) + '.csv')
+            daily_file = DAILY_REPORT_DIR / (current_day.strftime(DAY_FORMAT) + '.csv')
             with open(str(daily_file), 'w', newline='') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
 
                 q = session.query(DailyDiagnosticChangeModel)
-                daily_changes = q.filter_by(year=current_day.year, month=current_day.month, day=current_day.day).all()
+                daily_changes = q.filter_by(date=current_day).all()
 
                 print(current_day)
                 if daily_changes is not None:
@@ -74,7 +76,6 @@ def export_daily_report_to_csv():
                                 totals[daily_change.locator] = {
                                     'longitude': geo_locations[daily_change.locator]['longitude'],
                                     'latitude': geo_locations[daily_change.locator]['latitude'],
-                                    'state': geo_locations[daily_change.locator]['state'],
                                     'data': [
                                         daily_change.diagnostic_0,
                                         daily_change.diagnostic_1,
@@ -117,11 +118,10 @@ def export_daily_report_to_csv():
                 total_status = 0
                 # export all totals in the current day
                 # this take into account the total from previous days if no daily change in the current day
-                for npa, total in totals.items():
+                for locator, total in totals.items():
                     total_status += sum(total['data'])
                     writer.writerow({
-                        'npa_plz': npa,
-                        'state': total['state'],
+                        'locator': locator,
                         'longitude': total['longitude'],
                         'latitude': total['latitude'],
                         'date': current_day.strftime(DAY_FORMAT),
@@ -133,8 +133,7 @@ def export_daily_report_to_csv():
                         'total_recovered_confirmed': total['data'][5],
                     })
                     merge_writer.writerow({
-                        'npa_plz': npa,
-                        'state': total['state'],
+                        'locator': locator,
                         'longitude': total['longitude'],
                         'latitude': total['latitude'],
                         'date': current_day.strftime(DAY_FORMAT),

@@ -13,6 +13,7 @@ READ_TOKEN = os.getenv("READ_TOKEN")
 READ_API_URL = os.getenv("READ_API_URL")
 
 DATABASE = os.getenv("DATABASE_NAME")
+MYSQL_PORT = os.getenv("MYSQL_PORT")
 
 OUTPUT_DATASETS_PATH = project_dir / 'output_datasets'
 BACKUP_PATH = project_dir / 'backups'
