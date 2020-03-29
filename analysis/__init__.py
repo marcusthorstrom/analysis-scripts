@@ -12,10 +12,11 @@ load_dotenv(dotenv_path=env_path, verbose=True)
 READ_TOKEN = os.getenv("READ_TOKEN")
 READ_API_URL = os.getenv("READ_API_URL")
 
-DATABASE = 'covid'
+DATABASE = 'covid_dev'
 
 INPUT_DATASETS_PATH = project_dir/ 'input_datasets'
 OUTPUT_DATASETS_PATH = project_dir / 'output_datasets'
+TMP_PATH = project_dir / 'tmp'
 BACKUP_PATH = project_dir / 'backups'
 BACKUP_DOCUMENTS_PATH = BACKUP_PATH / 'documents'
 
@@ -42,3 +43,6 @@ if not DAILY_REPORT_DIR.exists():
 
 if not GEO_LOCATION_DIR.exists():
     GEO_LOCATION_DIR.mkdir()
+
+if not TMP_PATH.exists():
+    TMP_PATH.mkdir()

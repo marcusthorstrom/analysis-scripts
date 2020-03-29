@@ -51,15 +51,19 @@ class DailyDiagnosticChangeModel(base):
 
 
 class LocationModel(base):
-    __tablename__ = 'location'
-    npa = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    state = sa.Column(sa.String(2))  # canton
+    """
+    headers from csv: country_code,postal_code,town,region,latitude,longitude
+    """
+    __tablename__ = 'locations'
+    postal_code = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    country_code = sa.Column(sa.String(3))
+    region = sa.Column(sa.String(100))
     town = sa.Column(sa.String(100))
     longitude = sa.Column(sa.Float)
     latitude = sa.Column(sa.Float)
 
     def __repr__(self):
-        return '<Location: NPA ' + self.npa + ' state ' + str(self.state) + '>'
+        return '<Location: ' + self.postal_code + ' region ' + str(self.region) + '>'
 
 
 def init_db():
