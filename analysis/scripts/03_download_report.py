@@ -2,7 +2,7 @@ from analysis.utils.download_report import download_hours_frame
 
 
 def run_selected_frame():
-    from_time = '2020-03-29T22'
+    from_time = '2020-03-29T22' # warning UTC timezone
     to_time = '2020-03-30T02'
     download_hours_frame(from_time, to_time, 10)
 
