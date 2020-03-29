@@ -14,9 +14,4 @@ def run_analysis_for_all(batch_size=1000):
 
 if __name__ == '__main__':
 
-    run_analysis_for_all(10000)
-
-
-
-
-
+    run_analysis_for_all(1000)

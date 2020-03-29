@@ -1,16 +1,14 @@
 import csv
-from analysis import GEO_DATA_FILE_FIRST
-from analysis import TMP_PATH
-from analysis import GEO_DATA_FILE_SECOND
+from analysis import TMP_PATH, GEOCODING_RAW_FILE_URL
 from analysis.utils.db import LocationModel
 from analysis.utils.db import session
 import requests
 
 
-GEOCODING_RAW_FILE_URL = "https://raw.githubusercontent.com/ch-covid-19/geo-locations/master/data/mex/MEX_geocoding.csv"
-
 GEOCODING_RAW_FILE = TMP_PATH / 'geocoding.csv'
 
+
+# country_code,postal_code,latitude,longitude,region_id
 
 def download_geocoding_file():
     print("downloading geocoding file...")
@@ -23,6 +21,10 @@ def download_geocoding_file():
 
 
 def upload_geo_data():
+    """
+     csv headers: country_code,postal_code,latitude,longitude,region_id
+    :return:
+    """
 
     geo_locations = {}
     with open(str(GEOCODING_RAW_FILE), 'r') as file:
@@ -31,29 +33,22 @@ def upload_geo_data():
             if i == 0:
                 continue  # skip header
 
-            print(row)
-
-            return
             location = {
-                'country_code': int(row[5]),
-                'town': row[4],
-                'state': row[3],
+                'country_code': row[0],
+                'postal_code': row[1],
                 'longitude': float(row[2]),
-                'latitude': float(row[1]),
+                'latitude': float(row[3]),
+                'region_id': row[4],
             }
 
             # remove duplicate by this...
-            geo_locations[location['npa']] = location
-
-            print(geo_locations)
-            return
-
+            geo_locations[location['postal_code']] = location
 
     for key, loc in geo_locations.items():
         location = LocationModel(
-            npa=loc['npa'],
-            town=loc['town'],
-            state=loc['state'],
+            postal_code=loc['postal_code'],
+            country_code=loc['country_code'],
+            region_id=loc['region_id'],
             longitude=loc['longitude'],
             latitude=loc['latitude'],
         )

@@ -11,7 +11,7 @@ class IndividualReportFactory:
     def build(json_object):
         seconds = json_object["data"]["timestamp"]["_seconds"]
         nanoseconds = json_object["data"]["timestamp"]["_nanoseconds"]
-        timestamp = (seconds + nanoseconds/1000000000) * 1000  # to milliseconds
+        timestamp = (seconds * 10e3) + (nanoseconds / 10e6) # to milliseconds
 
         return IndividualReportModel(
             document_id=json_object["id"],
