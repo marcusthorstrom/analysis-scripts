@@ -1,11 +1,11 @@
 from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy as sa
-from analysis import DATABASE
+from analysis import DATABASE, MYSQL_PORT
 
 
 base = declarative_base()
-engine = sa.create_engine('mysql+pymysql://root:root@localhost:8889/' + DATABASE)
+engine = sa.create_engine('mysql+pymysql://root:root@localhost:' + MYSQL_PORT + '/' + DATABASE)
 base.metadata.bind = engine
 session = orm.scoped_session(orm.sessionmaker())(bind=engine)
 
@@ -28,9 +28,7 @@ class DailyDiagnosticChangeModel(base):
     __tablename__ = 'daily_diagnostic_change' #<- must declare name for db table
     id = sa.Column(sa.Integer, primary_key=True,autoincrement=True)
     locator = sa.Column(sa.String(4))
-    year = sa.Column(sa.Integer)
-    month = sa.Column(sa.Integer)
-    day = sa.Column(sa.Integer)
+    date = sa.Column(sa.Date)
     diagnostic_0 = sa.Column(sa.Integer, default=0)
     diagnostic_1 = sa.Column(sa.Integer, default=0)
     diagnostic_2 = sa.Column(sa.Integer, default=0)
@@ -66,5 +64,3 @@ def init_db():
     base.metadata.create_all()
 
 
-if __name__ == '__main__':
-    init_db()

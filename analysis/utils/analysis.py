@@ -3,7 +3,7 @@ Created by nuffer at 3/24/20
 
 """
 import time
-from datetime import datetime
+from datetime import datetime, date
 import pandas as pd
 from analysis.utils.db import engine, session
 from analysis.utils.db import DailyDiagnosticChangeModel
@@ -114,19 +114,15 @@ def analysis_next_report(collection_size: int):
     # upload daily changes
     for doc_id, daily_delta in daily_delta_df.iterrows():
         locator = daily_delta['locator']
-        year = daily_delta['year']
-        month = daily_delta['month']
-        day = daily_delta['day']
+        _date = date(daily_delta['year'],daily_delta['month'],daily_delta['day'])
         q = session.query(DailyDiagnosticChangeModel)
-        daily_change = q.filter_by(locator=locator, year=year, month=month, day=day).first()
+        daily_change = q.filter_by(locator=locator, date=_date).first()
 
         if daily_change is None:
             # then create it
             daily_change = DailyDiagnosticChangeModel(
                 locator=locator,
-                year=year,
-                month=month,
-                day=day,
+                date=_date,
                 diagnostic_0=daily_delta['0'],
                 diagnostic_1=daily_delta['1'],
                 diagnostic_2=daily_delta['2'],
