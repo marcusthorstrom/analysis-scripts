@@ -64,3 +64,17 @@ To run export to geocoding:
 # need to be done only if change in geo location
 python analysis/scripts/90_export_geocoding.py
 ```
+
+## For backups
+
+### Create a backup of NOW
+```bash
+sh docker_db_backup.sh
+```
+
+### Relaod a backup
+```bash
+sh docker_db_restore.sh <relative path to the backup>
+# example
+sh docker_db_restore.sh backups/sql/covid.sql 
+```

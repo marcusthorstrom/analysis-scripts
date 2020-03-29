@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
-mysql="docker.pandemia.mysql"
-phpmyadmin="docker.pandemia.phpmyadmin"
+# load .env vars
+if [ -f .env ]
+then
+  export $(cat .env | sed 's/#.*//g' | xargs)
+fi
 
-docker rm ${mysql} --force
-docker rm ${phpmyadmin}  --force
+docker rm ${DOCKER_COVID_MYSQL} --force
+docker rm ${DOCKER_COVID_ADMIN}  --force
 
-docker run --name ${mysql} -d -e MYSQL_ROOT_PASSWORD=root -p 8889:3306 mysql
-docker run --name ${phpmyadmin}  -d --link my-mysql:db -p 8888:80 phpmyadmin/phpmyadmin
+docker run --name ${DOCKER_COVID_MYSQL} -d -e MYSQL_ROOT_PASSWORD=root -p ${MYSQL_PORT}:3306 mysql
+docker run --name ${DOCKER_COVID_ADMIN}  -d --link ${DOCKER_COVID_MYSQL}:db -p ${PHPMYADMIN_PORT}:80 phpmyadmin/phpmyadmin

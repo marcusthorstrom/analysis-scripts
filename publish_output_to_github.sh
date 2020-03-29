@@ -4,15 +4,20 @@
 # - you need to have the right to publish in the targeted repo
 # - you need to check the path...they are relative
 
+# load .env vars
+if [ -f .env ]
+then
+  export $(cat .env | sed 's/#.*//g' | xargs)
+fi
+
 OUTPUT_DIR='output_datasets/.'
-PUBLIC_DATASET_REPO='../datasets'
 
 # copy files
-cp -R $OUTPUT_DIR/daily-reports $PUBLIC_DATASET_REPO
-cp $OUTPUT_DIR/merge-all-days.csv $PUBLIC_DATASET_REPO
+cp -R $OUTPUT_DIR/daily-reports $PUBLIC_DATASETS_REPO_RELATIVE_PATH
+cp $OUTPUT_DIR/merge-all-days.csv $PUBLIC_DATASETS_REPO_RELATIVE_PATH
 
 # move to the repo
-cd $PUBLIC_DATASET_REPO
+cd $PUBLIC_DATASETS_REPO_RELATIVE_PATH
 
 # print the timestamp (needed for the frontend)
 now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
