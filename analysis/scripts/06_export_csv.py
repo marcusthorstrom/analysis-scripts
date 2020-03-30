@@ -67,7 +67,6 @@ def export_daily_report_to_csv():
                 q = session.query(DailyDiagnosticChangeModel)
                 daily_changes = q.filter_by(date=current_day).all()
 
-                print(current_day)
                 if daily_changes is not None:
                     for daily_change in daily_changes:
                         try:
@@ -144,7 +143,7 @@ def export_daily_report_to_csv():
                         'recovered_not_confirmed': total['data'][4],
                         'recovered_confirmed': total['data'][5],
                     })
-                print(total_status)
+                print('CSV for date: ' + str(current_day) + ' with ' + str(total_status) + ' records')
 
             current_day = current_day + timedelta(days=1)
 
