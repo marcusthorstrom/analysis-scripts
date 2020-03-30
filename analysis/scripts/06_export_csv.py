@@ -13,7 +13,10 @@ DAY_FORMAT = '%Y-%m-%d'
 def get_starting_date():
     q = session.query(DailyDiagnosticChangeModel)
     daily_change = q.order_by(DailyDiagnosticChangeModel.date).first()
-    return daily_change.date
+    if daily_change is None:
+        return date.today()
+    else:
+        return daily_change.date
 
 
 def export_daily_report_to_csv():
