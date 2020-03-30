@@ -40,7 +40,7 @@ def export_daily_report_to_csv():
 
     fieldnames = [
         'date',
-        'locator',
+        'postal_code',
         'latitude',
         'longitude',
         'healthy',
@@ -124,7 +124,7 @@ def export_daily_report_to_csv():
                 for locator, total in totals.items():
                     total_status += sum(total['data'])
                     writer.writerow({
-                        'locator': locator,
+                        'postal_code': locator,
                         'longitude': total['longitude'],
                         'latitude': total['latitude'],
                         'date': current_day.strftime(DAY_FORMAT),
@@ -136,7 +136,7 @@ def export_daily_report_to_csv():
                         'recovered_confirmed': total['data'][5],
                     })
                     merge_writer.writerow({
-                        'locator': locator,
+                        'postal_code': locator,
                         'longitude': total['longitude'],
                         'latitude': total['latitude'],
                         'date': current_day.strftime(DAY_FORMAT),
