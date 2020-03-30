@@ -93,12 +93,6 @@ To run export to csv:
 python analysis/scripts/06_export_csv.py
 ```
 
-To run export to geocoding:
-```bash
-# need to be done only if change in geo location
-File missing: python analysis/scripts/90_export_geocoding.py
-```
-
 ## For backups
 
 ### Create a backup of NOW
