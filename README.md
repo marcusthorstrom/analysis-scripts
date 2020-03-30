@@ -9,21 +9,13 @@ We recomand that you activate a virtual environment before.
 sh python_install.sh
 ```
 
+If you run from analysis-script folder, you might want to set up the PYTHONPATH as below:
+`export PYTHONPATH=$PWD/analysis:$PYTHONPATH`
+
 ### Install docker
 ```bash
 sh docker_install.sh
 ```
-
-### Run docker
-
-Warning, this script is also killing the container berfore restart. So you need to do it once.
-```bash
-sh docker_run.sh
-```
-
-### Create the database
-
-Connect to phpmyadmin and you have to create a database with the same name as in the .env file.
 
 ### Update .env file
 
@@ -50,6 +42,17 @@ DATABASE_NAME=covid_dev
 GEOCODING_RAW_FILE_URL = "https://raw.githubusercontent.com/ch-covid-19/geo-locations/master/data/mex/MEX_geocoding.csv"
 ```
 
+### Run docker
+
+Warning, this script is also killing the container berfore restart. So you need to do it once.
+```bash
+sh docker_run.sh
+```
+
+### Create the database
+
+1. Connect to phpmyadmin (http://localhost:9000/db_structure.php)
+2. You have to create a database (default: covid_dev) with the same name as in the .env file.
 
 ### Run the scripts
 
@@ -88,12 +91,6 @@ To run export to csv:
 
 ```bash
 python analysis/scripts/06_export_csv.py
-```
-
-To run export to geocoding:
-```bash
-# need to be done only if change in geo location
-python analysis/scripts/90_export_geocoding.py
 ```
 
 ## For backups

@@ -9,4 +9,3 @@ def run_selected_frame():
 
 if __name__ == '__main__':
     run_selected_frame()
-

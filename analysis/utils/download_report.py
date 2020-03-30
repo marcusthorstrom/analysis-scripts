@@ -39,8 +39,6 @@ def download_json(from_unix: int, to_unix: int):
     return []
 
 
-
-
 def download_data(from_time, to_time, period_minutes):
 
     # clean the current raw-data
@@ -77,7 +75,7 @@ def download_worker(args):
     _prev_minute_str = datetime.fromtimestamp(_previous_minute).strftime(DATE_PARAM_FORMAT)
     _next_minute_str = datetime.fromtimestamp(_next_minute).strftime(DATE_PARAM_FORMAT)
 
-    print(" * downloaded for " + str(_prev_minute_str) + " with " + str(len(data)) + " elements")
+    print(" * downloaded for " + str(_prev_minute_str) + " with " + str(len(data)) + " elements" )
     return data
 
 
