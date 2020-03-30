@@ -8,6 +8,7 @@ from analysis import READ_TOKEN
 from analysis.utils.db import session
 from analysis.utils.factory import IndividualReportFactory
 from sqlalchemy.exc import IntegrityError
+from json.decoder import JSONDecodeError
 
 DATE_PARAM_FORMAT = '%Y-%m-%dT%H:%M:%S'
 DATE_HOUR_PARAM_FORMAT = '%Y-%m-%dT%H'
@@ -22,8 +23,13 @@ def download_json(from_unix: int, to_unix: int):
     end_time_str = end_time.strftime(DATE_PARAM_FORMAT)
 
     payload = {'start': start_time_str, 'end': end_time_str, 'token': READ_TOKEN}
-    resp = requests.get(READ_API_URL, params=payload)
-    data = resp.json()
+    try:
+        resp = requests.get(READ_API_URL, params=payload)
+        data = resp.json()
+    except JSONDecodeError:
+        print('JSONDecodeError: ',resp.url)
+    except UnboundLocalError as e:
+        print('UnboundLocalError: ',str(e))
 
     if 'error' in data:
         # Empty collection
