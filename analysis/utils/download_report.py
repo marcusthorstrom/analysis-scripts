@@ -25,9 +25,10 @@ def download_json(from_unix: int, to_unix: int):
     resp = requests.get(READ_API_URL, params=payload)
     data = resp.json()
 
+    print("Downloading from URL:{}".format(resp.url))
     if 'error' in data:
         # Empty collection
-        #print(data['error'])
+        print(data['error'])
         return []
     else:
         return data
@@ -69,7 +70,7 @@ def download_worker(args):
     _prev_minute_str = datetime.fromtimestamp(_previous_minute).strftime(DATE_PARAM_FORMAT)
     _next_minute_str = datetime.fromtimestamp(_next_minute).strftime(DATE_PARAM_FORMAT)
 
-    print(" * downloaded for " + str(_prev_minute_str) + " with " + str(len(data)) + " elements")
+    print(" * downloaded for " + str(_prev_minute_str) + " with " + str(len(data)) + " elements" )
     return data
 
 
