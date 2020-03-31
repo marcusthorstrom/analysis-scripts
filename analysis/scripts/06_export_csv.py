@@ -115,7 +115,7 @@ def export_daily_report_to_csv():
 
                         except KeyError:
                             # wrong npa
-                            print('Wrong npa: ' + daily_change.locator)
+                            print('Wrong postal code: ' + daily_change.locator)
 
                 total_status = 0
                 # export all totals in the current day
