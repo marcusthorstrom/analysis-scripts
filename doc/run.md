@@ -37,6 +37,18 @@ To run export to csv:
 python analysis/scripts/06_export_csv.py
 ```
 
+##### Start Docker Containers
+
+```bash
+sh docker_start.sh
+```
+
+##### Stop Docker Containers
+
+```bash
+sh docker_stop.sh
+```
+
 # For backups
 
 ## Create a backup of NOW
