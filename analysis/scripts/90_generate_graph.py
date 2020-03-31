@@ -6,6 +6,7 @@ import pandas as pd
 from analysis.utils.db import engine, session
 from datetime import datetime
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 
 def generate_report_by_time():
@@ -24,8 +25,8 @@ def generate_report_by_time():
         _date = datetime.fromtimestamp(report['timestamp'])
         reports_counts.append(reports_count)
         reports_dates.append(_date)
-    import matplotlib.dates as mdates
 
+    print('Current number of individual reports: ',reports_count)
     # plot
     fig, ax = plt.subplots()
     plt.plot(reports_dates, reports_counts)
