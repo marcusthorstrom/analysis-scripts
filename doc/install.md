@@ -59,5 +59,9 @@ sh docker_run.sh
 
 ## Create the database
 
-1. Connect to phpmyadmin (http://localhost:9000/db_structure.php)
+1. Connect to phpmyadmin (http://localhost:9000/db_structure.php) and login
+   with username `root` and password `root`.
 2. You have to create a database (default: covid_dev) with the same name as in the .env file.
+   ![](php_create_db.png)
+
+Now follow the steps in [run.md](run.md)
