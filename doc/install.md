@@ -3,7 +3,14 @@
 For installing the analysis scripts
 
 ## Install python
-We recomand that you activate a virtual environment before.
+We recommend that you activate a virtual environment as follows:
+
+```sh
+python -m venv .venv
+source .venv/bin/activate
+```
+
+and install:
 
 ```bash
 sh python_install.sh
@@ -19,7 +26,7 @@ sh docker_install.sh
 
 ## Update .env file
 
-yeah...you have to update it.
+First copy the template `.env.dist` to `.env`. The file `.env.dist` contains:
 
 ```bash
 # firebase vars
@@ -41,6 +48,7 @@ DATABASE_NAME=covid_dev
 # your country geocoding file 
 GEOCODING_RAW_FILE_URL = "https://raw.githubusercontent.com/ch-covid-19/geo-locations/master/data/mex/MEX_geocoding.csv"
 ```
+Contact the maintainers for `READ_API_URL` and `READ_TOKEN`.
 
 ## Run docker
 
