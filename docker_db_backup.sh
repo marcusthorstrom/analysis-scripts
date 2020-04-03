@@ -3,7 +3,7 @@
 # load .env vars
 if [ -f .env ]
 then
-  export $(cat .env | sed 's/#.*//g' | xargs)
+  export $(cat .env | sed 's/^#.*//g' | xargs)
 fi
 
 now=$(date -u +"%Y_%m_%d_%H_%M_%S")
