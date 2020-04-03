@@ -46,7 +46,7 @@ PUBLIC_DATASETS_REPO_RELATIVE_PATH='../datasets'
 DATABASE_NAME=covid_dev
 
 # your country geocoding file 
-GEOCODING_RAW_FILE_URL = "https://raw.githubusercontent.com/ch-covid-19/geo-locations/master/data/swe/swe_geocoding.csv"
+GEOCODING_RAW_FILE_URL = "https://raw.githubusercontent.com/covidmap-sweden/geo-locations/master/data/swe/swe_geocoding.csv"
 ```
 Contact the maintainers for `READ_API_URL` and `READ_TOKEN`.
 
