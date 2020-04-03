@@ -3,7 +3,7 @@
 # load .env vars
 if [ -f .env ]
 then
-  export $(cat .env | sed 's/#.*//g' | xargs)
+  export $(cat .env | sed 's/^#.*//g' | xargs)
 fi
 
 docker rm ${DOCKER_COVID_MYSQL} --force
