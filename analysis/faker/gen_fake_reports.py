@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from analysis.utils.db import IndividualReportModel, Comorbid
 from analysis.utils.db import LocationModel
 from analysis.utils.db import session
-from analysis.utils import enum
+from analysis.utils import db_enum as enum
 
 def get_npa_list():
     q = session.query(LocationModel)
