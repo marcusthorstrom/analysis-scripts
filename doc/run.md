@@ -37,6 +37,11 @@ To run export to csv:
 python analysis/scripts/06_export_csv.py
 ```
 
+To run the web-api-server:
+```bash
+python api.py
+```
+
 # For backups
 
 ## Create a backup of NOW
