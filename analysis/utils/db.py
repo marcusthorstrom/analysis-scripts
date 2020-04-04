@@ -2,6 +2,7 @@ from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy as sa
 from analysis import DATABASE, MYSQL_PORT
+from analysis.utils import enum
 
 
 base = declarative_base()
@@ -11,6 +12,7 @@ session = orm.scoped_session(orm.sessionmaker())(bind=engine)
 
 
 class IndividualReportModel(base):
+    """JSON data is translated into SQL table columns."""
     __tablename__ = 'individual_report'
     document_id = sa.Column(sa.String(30), primary_key=True)
     diagnostic = sa.Column(sa.Integer,nullable=False)
@@ -19,9 +21,68 @@ class IndividualReportModel(base):
     timestamp = sa.Column(sa.BigInteger, nullable=False)
     symptoms = sa.Column(sa.String(255))
     analysis_done = sa.Column(sa.Boolean,nullable=False)
+    # covidmap specific 
+    # old questionnare - incomplete
+    # *****************************
+    # 1. Basic information
+    # --------------------
+    # age = sa.Column(sa.Integer, nullable=False)
+    # gender = sa.Column(sa.Enum(Gender), nullable=False)
+    # pregnant = sa.Column(sa.Boolean)
+    # weight = sa.Column(sa.Integer, nullable=False)
+    # height = sa.Column(sa.Integer, nullable=False)
+
+    # 2. Epidemological information
+    # -----------------------------
+    # epi_travel = sa.Column(sa.Boolean, nullable=False)
+    # # contact with a confirmed
+    # epi_contact = sa.Column(sa.Boolean, nullable=False)
+
+    # 3. Symptoms
+    # -----------
+    # # chest pain
+    # sym_chest =  
+    
+    # 1177 questions
+    # **************
+    # Key symptoms
+    # ------------
+    temp = sa.Column(enum.Scale3, nullable=False)
+    cough = sa.Column(enum.Scale4, nullable=False)
+    breathless = sa.Column(enum.Scale4, nullable=False)
+    energy = sa.Column(enum.Energy, nullable=False)
+    # If not currently sick (ie NO Q1-4) , provide assessment about risk of
+    # becoming sick
+    exposure = sa.Column(enum.Exposure)
+    has_comorbid = sa.Column(sa.Boolean)
+    comorbid = orm.relationship("Comorbid")
+    compromised_immune = sa.Column(sa.Boolean)
+    age = sa.Column(enum.Scale3)
+    
 
     def __repr__(self):
         return '<Indiv. report: NPA ' + self.locator + ' time ' + str(self.timestamp) + '>'
+
+
+class Comorbid(base):
+    """Do you have any of the following ongoing illnesses? (multiple choice)
+    
+    One-to-one mapping
+    ref: https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-one
+    """
+    __tablename__ = "comorbidities"
+    parent_id = sa.Column(
+        sa.String(30),
+        sa.ForeignKey('individual_report.document_id')
+    )
+    hypertension = sa.Column(sa.Boolean)
+    cardiovascular = sa.Column(sa.Boolean)
+    pulmonary = sa.Column(sa.Boolean)
+    cancer = sa.Column(sa.Boolean)
+    diabetes = sa.Column(sa.Boolean)
+    renal = sa.Column(sa.Boolean)
+    neurological = sa.Column(sa.Boolean)
+    respiratory = sa.Column(sa.Boolean)
 
 
 class DailyDiagnosticChangeModel(base):
