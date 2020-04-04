@@ -2,7 +2,7 @@ from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy as sa
 from analysis import DATABASE, MYSQL_PORT
-from analysis.utils import enum
+from analysis.utils import db_enum as enum
 
 
 base = declarative_base()
@@ -62,7 +62,9 @@ class IndividualReportModel(base):
 
     compromised_immune = sa.Column(sa.Boolean)
     age = sa.Column(sa.Enum(enum.Scale3))
-    
+
+    # final symptom risk factor
+    S = sa.Column(sa.Integer, default=0)
 
     def __repr__(self):
         return '<Indiv. report: NPA ' + self.locator + ' time ' + str(self.timestamp) + '>'
