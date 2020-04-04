@@ -15,7 +15,7 @@ def get_npa_list():
     locations = q.all()
     geo_locations = []
     for location in locations:
-        geo_locations.append(str(location.npa))
+        geo_locations.append(str(location.postal_code))
     return geo_locations
 
 
