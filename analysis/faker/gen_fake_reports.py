@@ -65,7 +65,6 @@ def insert_fake_inidividual_reports():
             
             has_comorbid = random_bool()
             comorbid = Comorbid(
-                # list(dict(
                 hypertension = random_bool(),
                 cardiovascular = random_bool(),
                 pulmonary = random_bool(),
@@ -74,21 +73,25 @@ def insert_fake_inidividual_reports():
                 renal = random_bool(),
                 neurological = random_bool(),
                 respiratory = random_bool(),
-            # ).values())
             )
             report = IndividualReportModel(
+                # Metadata
                 document_id=doc_id,
                 diagnostic=random.randint(0, 4),
                 locator=person['npa'],
                 session_id=person['session_id'],
                 timestamp=(timestamp + sample ) * 1000,  # to millisecond
                 analysis_done=False,
+                # Actual data
                 temp=enum.Scale3(random.randint(1, 3)).name,
                 cough=enum.Scale4(random.randint(0, 3)).name,
                 breathless=enum.Scale4(random.randint(0, 3)).name,
                 energy=enum.Energy(random.randint(0, 4)).name,
+                exposure=enum.Exposure(random.randint(0, 2)).name,
                 has_comorbid=has_comorbid,
                 comorbid=comorbid,
+                compromised_immune=random_bool(),
+                age=enum.Scale3(random.randint(1, 3)).name,
             )
             # print(report.timestamp)
             session.add(report)
