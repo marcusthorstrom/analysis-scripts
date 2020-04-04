@@ -20,5 +20,5 @@ class IndividualReportFactory:
             session_id=json_object["data"]["sessionId"],
             timestamp=timestamp,
             analysis_done=False,
-            symptoms=str(json_object["data"]["symptoms"])
+            # symptoms=str(json_object["data"]["symptoms"])
         )
