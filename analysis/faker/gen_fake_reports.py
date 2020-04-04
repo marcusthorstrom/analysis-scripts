@@ -6,7 +6,7 @@ import time
 import uuid
 import random
 from datetime import datetime, timedelta
-from analysis.utils.db import IndividualReportModel
+from analysis.utils.db import IndividualReportModel, Comorbid
 from analysis.utils.db import LocationModel
 from analysis.utils.db import session
 from analysis.utils import enum
@@ -49,6 +49,9 @@ def insert_fake_inidividual_reports():
     _from = int(datetime.strptime(from_day, DAY_FORMAT).timestamp())
     _to = int(datetime.strptime(to_day, DAY_FORMAT).timestamp())
 
+    def random_bool():
+        return random.randint(0, 1)
+
     current_day = from_date
     while current_day <= to_date:
 
@@ -59,6 +62,20 @@ def insert_fake_inidividual_reports():
             person = random_list_element(person_list)
 
             doc_id = str(uuid.uuid4())[0:20]
+            
+            has_comorbid = random_bool()
+            comorbid = Comorbid(
+                # list(dict(
+                hypertension = random_bool(),
+                cardiovascular = random_bool(),
+                pulmonary = random_bool(),
+                cancer = random_bool(),
+                diabetes = random_bool(),
+                renal = random_bool(),
+                neurological = random_bool(),
+                respiratory = random_bool(),
+            # ).values())
+            )
             report = IndividualReportModel(
                 document_id=doc_id,
                 diagnostic=random.randint(0, 4),
@@ -70,6 +87,8 @@ def insert_fake_inidividual_reports():
                 cough=enum.Scale4(random.randint(0, 3)).name,
                 breathless=enum.Scale4(random.randint(0, 3)).name,
                 energy=enum.Energy(random.randint(0, 4)).name,
+                has_comorbid=has_comorbid,
+                comorbid=comorbid,
             )
             # print(report.timestamp)
             session.add(report)

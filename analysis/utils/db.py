@@ -54,8 +54,12 @@ class IndividualReportModel(base):
     # # If not currently sick (ie NO Q1-4) , provide assessment about risk of
     # # becoming sick
     exposure = sa.Column(sa.Enum(enum.Exposure))
+
     has_comorbid = sa.Column(sa.Boolean)
-    # comorbid = orm.relationship("Comorbid")
+    comorbid = orm.relationship(
+        "Comorbid", uselist=False, back_populates="parent"
+    )
+
     compromised_immune = sa.Column(sa.Boolean)
     age = sa.Column(sa.Enum(enum.Scale3))
     
@@ -64,25 +68,29 @@ class IndividualReportModel(base):
         return '<Indiv. report: NPA ' + self.locator + ' time ' + str(self.timestamp) + '>'
 
 
-# class Comorbid(base):
-#     """Do you have any of the following ongoing illnesses? (multiple choice)
+class Comorbid(base):
+    """Do you have any of the following ongoing illnesses? (multiple choice)
     
-#     One-to-one mapping
-#     ref: https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-one
-#     """
-#     __tablename__ = "comorbidities"
-#     parent_id = sa.Column(
-#         sa.String(30),
-#         sa.ForeignKey('individual_report.document_id')
-#     )
-#     hypertension = sa.Column(sa.Boolean)
-#     cardiovascular = sa.Column(sa.Boolean)
-#     pulmonary = sa.Column(sa.Boolean)
-#     cancer = sa.Column(sa.Boolean)
-#     diabetes = sa.Column(sa.Boolean)
-#     renal = sa.Column(sa.Boolean)
-#     neurological = sa.Column(sa.Boolean)
-#     respiratory = sa.Column(sa.Boolean)
+    One-to-one mapping
+    ref: https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-one
+    """
+    __tablename__ = "comorbidities"
+    parent_id = sa.Column(
+        sa.String(30),
+        sa.ForeignKey('individual_report.document_id'),
+        primary_key=True,
+    )
+    parent = orm.relationship(
+        "IndividualReportModel", back_populates="comorbid"
+    ) 
+    hypertension = sa.Column(sa.Boolean)
+    cardiovascular = sa.Column(sa.Boolean)
+    pulmonary = sa.Column(sa.Boolean)
+    cancer = sa.Column(sa.Boolean)
+    diabetes = sa.Column(sa.Boolean)
+    renal = sa.Column(sa.Boolean)
+    neurological = sa.Column(sa.Boolean)
+    respiratory = sa.Column(sa.Boolean)
 
 
 class DailyDiagnosticChangeModel(base):
