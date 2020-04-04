@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "/home/avmo/.pyenv/versions/covidmap-sweden/bin/python",
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
+}

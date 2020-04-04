@@ -6,16 +6,17 @@ import time
 import uuid
 import random
 from datetime import datetime, timedelta
-from analysis.utils.db import IndividualReportModel
+from analysis.utils.db import IndividualReportModel, Comorbid
 from analysis.utils.db import LocationModel
 from analysis.utils.db import session
+from analysis.utils import enum
 
 def get_npa_list():
     q = session.query(LocationModel)
     locations = q.all()
     geo_locations = []
     for location in locations:
-        geo_locations.append(str(location.npa))
+        geo_locations.append(str(location.postal_code))
     return geo_locations
 
 
@@ -48,6 +49,9 @@ def insert_fake_inidividual_reports():
     _from = int(datetime.strptime(from_day, DAY_FORMAT).timestamp())
     _to = int(datetime.strptime(to_day, DAY_FORMAT).timestamp())
 
+    def random_bool():
+        return random.randint(0, 1)
+
     current_day = from_date
     while current_day <= to_date:
 
@@ -58,13 +62,36 @@ def insert_fake_inidividual_reports():
             person = random_list_element(person_list)
 
             doc_id = str(uuid.uuid4())[0:20]
+            
+            has_comorbid = random_bool()
+            comorbid = Comorbid(
+                hypertension = random_bool(),
+                cardiovascular = random_bool(),
+                pulmonary = random_bool(),
+                cancer = random_bool(),
+                diabetes = random_bool(),
+                renal = random_bool(),
+                neurological = random_bool(),
+                respiratory = random_bool(),
+            )
             report = IndividualReportModel(
+                # Metadata
                 document_id=doc_id,
                 diagnostic=random.randint(0, 4),
                 locator=person['npa'],
                 session_id=person['session_id'],
                 timestamp=(timestamp + sample ) * 1000,  # to millisecond
-                analysis_done=False
+                analysis_done=False,
+                # Actual data
+                temp=enum.Scale3(random.randint(1, 3)).name,
+                cough=enum.Scale4(random.randint(0, 3)).name,
+                breathless=enum.Scale4(random.randint(0, 3)).name,
+                energy=enum.Energy(random.randint(0, 4)).name,
+                exposure=enum.Exposure(random.randint(0, 2)).name,
+                has_comorbid=has_comorbid,
+                comorbid=comorbid,
+                compromised_immune=random_bool(),
+                age=enum.Scale3(random.randint(1, 3)).name,
             )
             # print(report.timestamp)
             session.add(report)
