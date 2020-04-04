@@ -2,7 +2,7 @@ from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy as sa
 from analysis import DATABASE, MYSQL_PORT
-from analysis.utils import enum
+from analysis.utils import db_enum as enum
 
 
 base = declarative_base()
@@ -17,9 +17,9 @@ class IndividualReportModel(base):
     document_id = sa.Column(sa.String(30), primary_key=True)
     diagnostic = sa.Column(sa.Integer,nullable=False)
     locator = sa.Column(sa.String(15),nullable=False)
-    session_id = sa.Column(sa.String(50),nullable=False)
+    session_id = sa.Column(sa.String(50)) # ,nullable=False)
     timestamp = sa.Column(sa.BigInteger, nullable=False)
-    # symptoms = sa.Column(sa.String(255))
+    symptoms = sa.Column(sa.String(255))
     analysis_done = sa.Column(sa.Boolean,nullable=False)
     # covidmap specific 
     # old questionnare - incomplete
@@ -62,7 +62,9 @@ class IndividualReportModel(base):
 
     compromised_immune = sa.Column(sa.Boolean)
     age = sa.Column(sa.Enum(enum.Scale3))
-    
+
+    # final symptom risk factor
+    S = sa.Column(sa.Integer, default=0)
 
     def __repr__(self):
         return '<Indiv. report: NPA ' + self.locator + ' time ' + str(self.timestamp) + '>'

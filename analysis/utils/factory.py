@@ -12,6 +12,7 @@ class IndividualReportFactory:
         seconds = json_object["data"]["timestamp"]["_seconds"]
         nanoseconds = json_object["data"]["timestamp"]["_nanoseconds"]
         timestamp = (seconds + nanoseconds/1000000000) * 1000  # to milliseconds
+        symptoms = json_object["data"]["symptoms"]
 
         return IndividualReportModel(
             document_id=json_object["id"],
@@ -20,5 +21,11 @@ class IndividualReportFactory:
             session_id=json_object["data"]["sessionId"],
             timestamp=timestamp,
             analysis_done=False,
-            # symptoms=str(json_object["data"]["symptoms"])
+            # FIXME: need to be changed if the website is updated with new
+            # questions based on 1177 guidelines
+            symptoms=str(symptoms),
+            temp="mid" if "fever" in symptoms else "low",
+            cough="often" if "cough" in symptoms else "no",
+            breathless="often" if "dyspnea" in symptoms else "no",
+            energy="tired" if "weakness" in symptoms else "normal"
         )
