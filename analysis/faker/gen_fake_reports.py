@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from analysis.utils.db import IndividualReportModel
 from analysis.utils.db import LocationModel
 from analysis.utils.db import session
+from analysis.utils import enum
 
 def get_npa_list():
     q = session.query(LocationModel)
@@ -64,7 +65,11 @@ def insert_fake_inidividual_reports():
                 locator=person['npa'],
                 session_id=person['session_id'],
                 timestamp=(timestamp + sample ) * 1000,  # to millisecond
-                analysis_done=False
+                analysis_done=False,
+                temp=enum.Scale3(random.randint(1, 3)).name,
+                cough=enum.Scale4(random.randint(0, 3)).name,
+                breathless=enum.Scale4(random.randint(0, 3)).name,
+                energy=enum.Energy(random.randint(0, 4)).name,
             )
             # print(report.timestamp)
             session.add(report)

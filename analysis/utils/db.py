@@ -19,7 +19,7 @@ class IndividualReportModel(base):
     locator = sa.Column(sa.String(15),nullable=False)
     session_id = sa.Column(sa.String(50),nullable=False)
     timestamp = sa.Column(sa.BigInteger, nullable=False)
-    symptoms = sa.Column(sa.String(255))
+    # symptoms = sa.Column(sa.String(255))
     analysis_done = sa.Column(sa.Boolean,nullable=False)
     # covidmap specific 
     # old questionnare - incomplete
@@ -47,42 +47,42 @@ class IndividualReportModel(base):
     # **************
     # Key symptoms
     # ------------
-    temp = sa.Column(enum.Scale3, nullable=False)
-    cough = sa.Column(enum.Scale4, nullable=False)
-    breathless = sa.Column(enum.Scale4, nullable=False)
-    energy = sa.Column(enum.Energy, nullable=False)
-    # If not currently sick (ie NO Q1-4) , provide assessment about risk of
-    # becoming sick
-    exposure = sa.Column(enum.Exposure)
+    temp = sa.Column(sa.Enum(enum.Scale3), nullable=False)
+    cough = sa.Column(sa.Enum(enum.Scale4), nullable=False)
+    breathless = sa.Column(sa.Enum(enum.Scale4), nullable=False)
+    energy = sa.Column(sa.Enum(enum.Energy), nullable=False)
+    # # If not currently sick (ie NO Q1-4) , provide assessment about risk of
+    # # becoming sick
+    exposure = sa.Column(sa.Enum(enum.Exposure))
     has_comorbid = sa.Column(sa.Boolean)
-    comorbid = orm.relationship("Comorbid")
+    # comorbid = orm.relationship("Comorbid")
     compromised_immune = sa.Column(sa.Boolean)
-    age = sa.Column(enum.Scale3)
+    age = sa.Column(sa.Enum(enum.Scale3))
     
 
     def __repr__(self):
         return '<Indiv. report: NPA ' + self.locator + ' time ' + str(self.timestamp) + '>'
 
 
-class Comorbid(base):
-    """Do you have any of the following ongoing illnesses? (multiple choice)
+# class Comorbid(base):
+#     """Do you have any of the following ongoing illnesses? (multiple choice)
     
-    One-to-one mapping
-    ref: https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-one
-    """
-    __tablename__ = "comorbidities"
-    parent_id = sa.Column(
-        sa.String(30),
-        sa.ForeignKey('individual_report.document_id')
-    )
-    hypertension = sa.Column(sa.Boolean)
-    cardiovascular = sa.Column(sa.Boolean)
-    pulmonary = sa.Column(sa.Boolean)
-    cancer = sa.Column(sa.Boolean)
-    diabetes = sa.Column(sa.Boolean)
-    renal = sa.Column(sa.Boolean)
-    neurological = sa.Column(sa.Boolean)
-    respiratory = sa.Column(sa.Boolean)
+#     One-to-one mapping
+#     ref: https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-one
+#     """
+#     __tablename__ = "comorbidities"
+#     parent_id = sa.Column(
+#         sa.String(30),
+#         sa.ForeignKey('individual_report.document_id')
+#     )
+#     hypertension = sa.Column(sa.Boolean)
+#     cardiovascular = sa.Column(sa.Boolean)
+#     pulmonary = sa.Column(sa.Boolean)
+#     cancer = sa.Column(sa.Boolean)
+#     diabetes = sa.Column(sa.Boolean)
+#     renal = sa.Column(sa.Boolean)
+#     neurological = sa.Column(sa.Boolean)
+#     respiratory = sa.Column(sa.Boolean)
 
 
 class DailyDiagnosticChangeModel(base):
