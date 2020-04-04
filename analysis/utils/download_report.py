@@ -24,7 +24,7 @@ def download_json(from_unix: int, to_unix: int):
 
     payload = {'start': start_time_str, 'end': end_time_str, 'token': READ_TOKEN}
     try:
-        resp = requests.get(READ_API_URL, params=payload)
+        resp = requests.post(READ_API_URL, data=payload)
         data = resp.json()
         if 'error' in data:
             # Empty collection
