@@ -17,9 +17,9 @@ class IndividualReportModel(base):
     document_id = sa.Column(sa.String(30), primary_key=True)
     diagnostic = sa.Column(sa.Integer,nullable=False)
     locator = sa.Column(sa.String(15),nullable=False)
-    session_id = sa.Column(sa.String(50),nullable=False)
+    session_id = sa.Column(sa.String(50)) # ,nullable=False)
     timestamp = sa.Column(sa.BigInteger, nullable=False)
-    # symptoms = sa.Column(sa.String(255))
+    symptoms = sa.Column(sa.String(255))
     analysis_done = sa.Column(sa.Boolean,nullable=False)
     # covidmap specific 
     # old questionnare - incomplete
