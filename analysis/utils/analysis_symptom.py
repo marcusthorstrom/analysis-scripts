@@ -29,13 +29,6 @@ def map_calculate(collection_size: int):
     """Calcalate symptom factor S for the whole DB where analysis_done = 0"""
     start_time_analysis = time.time()
 
-    # load all previous reports
-    # report_done_df = pd.read_sql(
-    #     "SELECT * FROM individual_report WHERE analysis_done = 1",
-    #     con=engine,
-    #     index_col="document_id",
-    # )
-
     # load the next collection of reports to analyse
     next_reports = pd.read_sql(
         (
@@ -76,5 +69,16 @@ def map_calculate(collection_size: int):
     spend_time = time.time() - start_time_analysis
     print('Analysed {} samples in {} s'.format(collection_size, spend_time))
 
+
+def group_reports_by_location():
+    # load all previous reports
+    report_done_df = pd.read_sql(
+        "SELECT * FROM individual_report WHERE analysis_done = 1",
+        con=engine,
+        index_col="document_id",
+    )
+    print(report_done_df)
+
 if __name__ == "__main__":
     map_calculate(10)
+    group_reports_by_location()
