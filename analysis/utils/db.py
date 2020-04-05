@@ -1,3 +1,4 @@
+from datetime import date
 from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy as sa
@@ -141,16 +142,32 @@ class LocationModel(base):
     longitude = sa.Column(sa.Float)
     latitude = sa.Column(sa.Float)
 
+    # Computed
+    total_healthy = sa.Column(sa.Integer, default=0)
+    total_sick_guess_no_corona = sa.Column(sa.Integer, default=0)
+    total_sick_guess_corona = sa.Column(sa.Integer, default=0)
+    total_sick_corona_confirmed = sa.Column(sa.Integer, default=0)
+    total_recovered_confirmed = sa.Column(sa.Integer, default=0)
+    total_recovered_not_confirmed = sa.Column(sa.Integer, default=0)
+
     def __repr__(self):
         return '<Location: ' + self.postal_code + '>'
 
     def serialize(self):
         """The response by the REST-API"""
         return {
-            'postal_code' : self.postal_code,
+            'date': date.today().isoformat(),
+            'state': self.region_id.split("::")[0],
+            'npa_plz' : self.postal_code,
             'country_code' : self.country_code,
             'longitude' : self.longitude,
-            'latitude' : self.latitude
+            'latitude' : self.latitude,
+            'total_healthy' : self.total_healthy,
+            'total_sick_guess_no_corona' : self.total_sick_guess_no_corona,
+            'total_sick_guess_corona' : self.total_sick_guess_corona,
+            'total_sick_corona_confirmed' : self.total_sick_corona_confirmed,
+            'total_recovered_confirmed' : self.total_recovered_confirmed,
+            'total_recovered_not_confirmed' : self.total_recovered_not_confirmed,
         }
 
 def init_db():

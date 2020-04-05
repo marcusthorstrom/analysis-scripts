@@ -7,7 +7,10 @@ from analysis.utils.factory import IndividualReportFactory
 from analysis.utils.db import session, init_db
 from analysis.utils.db import LocationModel, IndividualReportModel
 from analysis.utils.geo import download_geocoding_file, upload_geo_data
-from analysis.utils.analysis_symptom import map_calculate
+from analysis.utils.analysis_symptom import (
+    map_calculate,
+    group_reports_by_location,
+)
 from analysis.utils.analysis import count_report_to_analyse
 
 
@@ -56,6 +59,7 @@ def analyse():
         while count_report_to_analyse() > 0:
             map_calculate(batch_size)
 
+        group_reports_by_location()
         return "Computed upto {} reports".format(batch_size)
     else:
         abort(400, "No reports left to analyse!")
@@ -99,6 +103,7 @@ def check_param(obj, param_list):
     for param in param_list:
         if (not param in obj) or (obj[param] == None):
             raise InvalidUsage("parameter '%s' is not supplied" % param)
+
 
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):

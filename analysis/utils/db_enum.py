@@ -10,9 +10,9 @@ class Scale3(Enum):
     - How high is your body temperature?
     - Age
     """
-    low = 1
-    mid = 2
-    high = 3
+    low = 0
+    mid = 1
+    high = 2
 
 class Scale4(Enum):
     """For questions like
