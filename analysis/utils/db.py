@@ -1,12 +1,14 @@
 from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy as sa
-from analysis import DATABASE, MYSQL_PORT
+from analysis import DATABASE, MYSQL_PORT, DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD
 from analysis.utils import db_enum as enum
 
 
 base = declarative_base()
-engine = sa.create_engine('mysql+pymysql://root:root@localhost:' + MYSQL_PORT + '/' + DATABASE)
+db_string = "mysql+pymysql://" + DATABASE_USERNAME + ":" + DATABASE_PASSWORD + "@" + DATABASE_URL + ":" + MYSQL_PORT + '/' + DATABASE
+print("Connecting to db: %s" % db_string)
+engine = sa.create_engine(db_string)
 base.metadata.bind = engine
 session = orm.scoped_session(orm.sessionmaker())(bind=engine)
 
