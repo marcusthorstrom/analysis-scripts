@@ -42,6 +42,18 @@ To run the web-api-server:
 python api.py
 ```
 
+##### Start Docker Containers
+
+```bash
+sh docker_start.sh
+```
+
+##### Stop Docker Containers
+
+```bash
+sh docker_stop.sh
+```
+
 # For backups
 
 ## Create a backup of NOW
