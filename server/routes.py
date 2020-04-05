@@ -1,10 +1,17 @@
 from server import app
 from server.invalid_usage import InvalidUsage
 from flask import jsonify, request, abort, make_response
+from sqlalchemy.exc import IntegrityError
 
 from analysis.utils.factory import IndividualReportFactory
-from analysis.utils.db import session
+from analysis.utils.db import session, init_db
 from analysis.utils.db import LocationModel, IndividualReportModel
+from analysis.utils.geo import download_geocoding_file, upload_geo_data
+from analysis.utils.analysis_symptom import (
+    map_calculate,
+    group_reports_by_location,
+)
+from analysis.utils.analysis import count_report_to_analyse
 
 
 import sys
@@ -13,6 +20,17 @@ import sys
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
+@app.route('/init', methods=['GET'])
+def init():
+    """Initialize database"""
+    init_db()
+    download_geocoding_file()
+    try:
+        upload_geo_data()
+    except IntegrityError:
+        session.rollback()
+        abort(400, "Database already initialized!")
+    return "Initialized DB and uploaded location data"
 
 @app.route('/locations', methods=['GET'])
 def all_locations():
@@ -25,6 +43,27 @@ def all():
     q = session.query(IndividualReportModel)
     individuals = q.all()
     return jsonify(individials= [individual.serialize() for individual in individuals])
+
+@app.route('/analyse', methods=['GET'])
+def analyse():
+    """Run analysis over reports of batch size `size`.
+    Examples
+    --------
+
+    /analyze?size=1000
+
+    """
+    batch_size = request.args.get('size', default=1000, type=int)
+    nb_count = count_report_to_analyse()
+    if nb_count:
+        while count_report_to_analyse() > 0:
+            map_calculate(batch_size)
+
+        group_reports_by_location()
+        return "Computed upto {} reports".format(batch_size)
+    else:
+        abort(400, "No reports left to analyse!")
+
 
 @app.route('/<int:id>', methods=['GET'])
 def get(id):
@@ -52,19 +91,19 @@ def add_person():
             session.commit()
         except:
             session.rollback()
-            print("Could not insert to database")
-            abort(500)
+            abort(500,"Could not insert to database")
     except TypeError:
         raise InvalidUsage("Some parameter was wrongly typed (string, int, array).")
     except:
-        print("Could not create Individual Report. Probably malformed json. JSON:{%s}, %s", request.json)
-        abort(400)
+        message = ("Could not create Individual Report. Probably malformed json. JSON:{%s}, %s", request.json)
+        abort(400, message)
 
 
 def check_param(obj, param_list):
     for param in param_list:
         if (not param in obj) or (obj[param] == None):
             raise InvalidUsage("parameter '%s' is not supplied" % param)
+
 
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):

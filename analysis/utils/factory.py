@@ -25,7 +25,7 @@ class IndividualReportFactory:
             # questions based on 1177 guidelines
             symptoms=str(symptoms),
             temp="mid" if "fever" in symptoms else "low",
-            cough="often" if "cough" in symptoms else "no",
-            breathless="often" if "dyspnea" in symptoms else "no",
+            cough="sometimes" if "cough" in symptoms else "no",
+            breathless="sometimes" if "dyspnea" in symptoms else "no",
             energy="tired" if "weakness" in symptoms else "normal"
         )
