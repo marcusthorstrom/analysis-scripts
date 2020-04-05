@@ -68,11 +68,13 @@ class IndividualReportModel(base):
 
     def __repr__(self):
         return '<Indiv. report: NPA ' + self.locator + ' time ' + str(self.timestamp) + '>'
-    """The response by the REST-API"""
+
     def serialize(self):
+        """The response by the REST-API"""
         return {
             'locator': self.locator,
-            'analysis_done': self.analysis_done
+            'analysis_done': self.analysis_done,
+            'S': self.S,
         }
 
 
@@ -139,8 +141,9 @@ class LocationModel(base):
 
     def __repr__(self):
         return '<Location: ' + self.postal_code + '>'
-    """The response by the REST-API"""
+
     def serialize(self):
+        """The response by the REST-API"""
         return {
             'postal_code' : self.postal_code,
             'country_code' : self.country_code,
