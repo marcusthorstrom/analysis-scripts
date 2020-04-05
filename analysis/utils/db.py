@@ -137,6 +137,14 @@ class LocationModel(base):
     longitude = sa.Column(sa.Float)
     latitude = sa.Column(sa.Float)
 
+    # Computed
+    total_healthy = sa.Column(sa.Integer, default=0)
+    total_sick_guess_no_corona = sa.Column(sa.Integer, default=0)
+    total_sick_guess_corona = sa.Column(sa.Integer, default=0)
+    total_sick_corona_confirmed = sa.Column(sa.Integer, default=0)
+    total_recovered_confirmed = sa.Column(sa.Integer, default=0)
+    total_recovered_not_confirmed = sa.Column(sa.Integer, default=0)
+
     def __repr__(self):
         return '<Location: ' + self.postal_code + '>'
     """The response by the REST-API"""
